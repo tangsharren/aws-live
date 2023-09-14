@@ -9,7 +9,7 @@ app = Flask(__name__)
 bucket = custombucket
 region = customregion
 
-db_conn = connections.Connection(
+db_conn = connections.Connection(   #Check the info is correct
     host=customhost,
     port=3306,
     user=customuser,
@@ -21,45 +21,77 @@ output = {}
 table = 'staff'
 
 
-#if call / then will redirect to that pg
-
+#if call / then will redirect to this pg
 @app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template('StaffLogin.html')
 
+#if call /studLogin then will redirect to this pg
+# @app.route("/companyLogin")
+# def compnayLogin():
+#     return render_template('CompanyLogin.html') 
 
-@app.route("/staffLogin")
-def companyLogin():
-    return render_template('StaffLogin.html') 
+#if call /studView then will redirect to this pg
+# @app.route("/studView", methods=['POST'])
+# def companyReg():
+#     companyName = request.form['companyName']
+#     companyEmail = request.form['companyEmail']
+#     companyContact = request.form['companyContact']
+#     companyAddress = request.form['companyAddress']
+#     typeOfBusiness = request.form['typeOfBusiness']
+#     numOfEmployee = request.form['numOfEmployee']
+#     overview = request.form['overview']
+#     companyPassword = request.form['companyPassword']
+#     status = "Pending Approval"
 
-@app.route("/staffPage", methods=['POST'])
-def GetEmp():
-    return render_template('StaffPage.html')
-    
+   
+#     insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+#     cursor = db_conn.cursor()
+
+     
+
+#     try:
+
+#         cursor.execute(insert_sql, (companyName, companyEmail, companyContact, companyAddress, typeOfBusiness, numOfEmployee, overview, companyPassword, status))
+#         db_conn.commit()
+        
+
+#     except Exception as e:
+#         return str(e) 
+        
+
+#     finally:
+#         cursor.close()
+
+#     print("all modification done...")
+#     return render_template('CompanyLogin.html')
+
+
 @app.route("/staffLogin", methods=['GET', 'POST'])
 def staffLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
-    status = "Pending Approval"
-    
+    #status = "Pending Approval"
+
+
     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
-    fetch_company_sql = "SELECT * FROM company WHERE status = %s"
+    #fetch_company_sql = "SELECT * FROM company WHERE status = %s"
     cursor = db_conn.cursor()
 
     if svEmail == "" and svPassword == "":
         return render_template('StaffLogin.html', empty_field=True)
 
     try:
-        cursor.execute(fetch_sv_sql, (svEmail))
+        cursor.execute(fetch_staff_sql, (svEmail))
         records = cursor.fetchall()
 
-        cursor.execute(fetch_student_sql, (status))
-        companyRecords = cursor.fetchall()
+        # cursor.execute(fetch_company_sql, (status))
+        # companyRecords = cursor.fetchall()
 
-        if records and records[0][2] != adminPassword:
-            return render_template('AdminLogin.html', login_failed=True)
+        if records and records[0][4] != svPassword:
+            return render_template('StaffLogin.html', login_failed=True)
         else:
-            return render_template('AdminPage.html', admin=records, company=companyRecords)
+            return render_template('StaffPage.html', staff=records)
 
     except Exception as e:
         return str(e)
@@ -67,37 +99,6 @@ def staffLogin():
     finally:
         cursor.close()
 
-
-@app.route("/fetchdata", methods=['POST'])
-def ReadEmp():
-    emp_id = request.form['emp_id']
-
-    fetch_sql = "SELECT * FROM employee WHERE emp_id = %s"
-    cursor = db_conn.cursor()
-    object_key = "emp-id-" + str(emp_id) + "_image_file" + ".jpg"
-    expiration = 3600
-
-    if emp_id == "":
-        return "Please enter an employee id"
-
-
-    try:
-        cursor.execute(fetch_sql, (emp_id))
-        records = cursor.fetchall()
-        try:
-            response = s3.generate_presigned_url('get_object',
-                                                Params={'Bucket': custombucket,
-                                                        'Key': object_key},
-                                                ExpiresIn=expiration)
-        except ClientError as e:
-            logging.error(e)
-
-
-
-    finally:
-        cursor.close()
-
-    return render_template('GetEmpOutput.html', staff=records, url=response)
     
 
 
