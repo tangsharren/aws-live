@@ -1,13 +1,17 @@
-<!DOCTYPE html>
+<!DOCTYPE html>Staff
 <html style="font-size: 16px;" lang="en"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Staff Login">
+    <meta name="keywords" content="Student Signup">
     <meta name="description" content="">
     <title>StaffLogin</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='nicepage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='StaffLogin.css') }}">
-   
+
+	<script src="{{ url_for('static', filename='jquery.js') }}"></script>
+	<script src="{{ url_for('static', filename='nicepage.js') }}"></script>
+
     <meta name="generator" content="Nicepage 5.17.1, nicepage.com">
     <meta name="referrer" content="origin">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
@@ -27,7 +31,20 @@
     <meta property="og:type" content="website">
   <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
   <body class="u-body u-xl-mode" data-lang="en"><header class="u-black u-clearfix u-header u-header" id="sec-519f"><div class="u-clearfix u-sheet u-sheet-1">
-        <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
+
+    {% if login_failed %}
+    <script>
+        alert("Invalid email or password. Please try again.");
+    </script>
+    {% endif %}
+
+   {% if empty_field %}
+    <script>
+        alert("Please enter both email and password.");
+    </script>
+    {% endif %}
+	  
+	  <nav class="u-menu u-menu-one-level u-offcanvas u-menu-1">
           <div class="menu-collapse u-custom-font u-font-merriweather" style="font-size: 1rem; letter-spacing: 0px;">
             <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-active-color u-custom-text-color u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
               <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-6809"></use></svg>
@@ -36,18 +53,23 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-custom-font u-font-merriweather u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="CompanyLogin.html" style="padding: 10px 20px;">Company</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="StaffLogin.html" style="padding: 10px 20px;">Uni Supervisor</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="StudLogin.html" style="padding: 10px 20px;">Student</a>
-</li></ul>
+            <ul class="u-custom-font u-font-merriweather u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="/companyLogin" style="padding: 10px 20px;">Company</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="/svLogin" style="padding: 10px 20px;">Uni Supervisor</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="/studLogin" style="padding: 10px 20px;">Student</a>
+</li>
+<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="/toStaffLogin" style="padding: 10px 20px;">Staff</a>
+</li>
+	    </ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="CompanyLogin.html">Company</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="StaffLogin.html">Uni Supervisor</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="StudLogin.html">Student</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/companyLogin">Company</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/svLogin">Uni Supervisor</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/studLogin">Student</a>
+</li>
+<li class="u-nav-item"><a class="u-button-style u-nav-link" href="/toStaffLogin">Staff</a>
 </li></ul>
               </div>
             </div>
@@ -63,14 +85,14 @@
             </a>
           </div>
           <div class="u-custom-menu u-nav-container">
-            <ul class="u-custom-font u-font-merriweather u-nav u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="Home.html" style="padding: 10px 8px;">Home</a>
+            <ul class="u-custom-font u-font-merriweather u-nav u-unstyled u-nav-3"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-grey-40 u-text-grey-40 u-text-hover-palette-5-base" href="/" style="padding: 10px 8px;">Home</a>
 </li></ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Home.html">Home</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/">Home</a>
 </li></ul>
               </div>
             </div>
@@ -85,7 +107,7 @@
           <div class="u-container-layout u-container-layout-1">
             <quillbot-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none;"></quillbot-extension>
             <quillbot-extension-highlights style="position: absolute; top: 0px; left: 0px; pointer-events: none;"></quillbot-extension-highlights>
-            <h1 class="u-text u-text-body-color u-text-default u-text-1">Uni Supervisor Login</h1>
+            <h1 class="u-text u-text-body-color u-text-default u-text-1">Staff Login</h1>
             <div class="u-border-2 u-border-palette-5-light-2 u-line u-line-horizontal u-line-2"></div>
           </div>
         </div>
@@ -94,29 +116,23 @@
     <section class="u-clearfix u-section-2" id="sec-3924">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-form u-form-1">
-          <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
+         
+		<form action="/staffLogin" method="post" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name u-label-left">
               <label for="name-1037" class="u-label u-label-1">Staff Email </label>
-              <input type="text" placeholder="Staff Email" id="name-1037" name="email" class="u-input u-input-rectangle u-input-1" required="">
+              <input type="email" placeholder="Staff Email" id="name-1037" name="svEmail" class="u-input u-input-rectangle u-input-1" required="">
             </div>
             <div class="u-form-email u-form-group u-label-left">
               <label for="email-1037" class="u-label u-label-2">Password</label>
-              <input type="email" placeholder="Password" id="email-1037" name="password" class="u-input u-input-rectangle u-input-2" required="">
+              <input type="password" placeholder="Password" id="email-1037" name="svPassword" class="u-input u-input-rectangle u-input-2" required="">
             </div>
-            <div class="u-form-group u-form-submit u-label-left">
-              <label class="u-label u-label-3"></label>
-              <input type="submit" value="submit" class="u-form-control-hidden">
-              <div class="u-align-left u-btn-submit-container">
-                <a href="#" class="u-border-2 u-border-grey-15 u-btn u-btn-round u-btn-submit u-button-style u-hover-grey-15 u-radius-5 u-white u-btn-1">Login</a>
+
+              <input type="submit" value="Login">
+
               </div>
             </div>
-            <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
-            <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then try again. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-            <input type="hidden" name="formServices" value="">
           </form>
         </div>
-       
       </div>
     </section>
     <section class="u-clearfix u-section-3" id="sec-fc59">
