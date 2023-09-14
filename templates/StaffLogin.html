@@ -95,7 +95,8 @@
     <section class="u-clearfix u-section-2" id="sec-3924">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-form u-form-1">
-          <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
+		
+          <form action="/staffLogin" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name u-label-left">
               <label for="name-1037" class="u-label u-label-1">Staff Email </label>
               <input type="text" placeholder="Staff Email" id="name-1037" name="email" class="u-input u-input-rectangle u-input-1" required="">
@@ -108,7 +109,9 @@
               <label class="u-label u-label-3"></label>
               <input type="submit" value="submit" class="u-form-control-hidden">
               <div class="u-align-left u-btn-submit-container">
-                <a href="#" class="u-border-2 u-border-grey-15 u-btn u-btn-round u-btn-submit u-button-style u-hover-grey-15 u-radius-5 u-white u-btn-1">Login</a>
+		<button type="submit" formaction="/staffPage"
+					style="background: grey; height: 45px; width: 200px; color:white; font:oblique;">Login
+					</button>
               </div>
             </div>
             <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent. </div>
@@ -116,6 +119,7 @@
             <input type="hidden" value="" name="recaptchaResponse">
             <input type="hidden" name="formServices" value="">
           </form>
+		
         </div>
         <a href="https://nicepage.me" class="u-active-none u-border-2 u-border-active-palette-2-dark-1 u-border-hover-palette-2-base u-border-no-left u-border-no-right u-border-no-top u-border-palette-1-base u-btn u-button-style u-hover-none u-none u-text-hover-palette-2-base u-text-palette-1-base u-btn-2">Sign Up</a>
       </div>
