@@ -35,8 +35,8 @@ def companyLogin():
 
 @app.route("/staffLogin", methods=['GET', 'POST'])
 def staffLogin():
-    staffEmail = request.form['staffEmail']
-    staffPassword = request.form['staffPassword']
+    svEmail = request.form['svEmail']
+    svPassword = request.form['svPassword']
 
     fetch_sql = "SELECT * FROM staff WHERE staffEmail = %s"
     cursor = db_conn.cursor()
