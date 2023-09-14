@@ -32,7 +32,7 @@ def home():
 def companyLogin():
     return render_template('StaffLogin.html') 
 
-@app.route("/staffPAge", methods=['POST'])
+@app.route("/staffPage", methods=['POST'])
 def GetEmp():
     return render_template('StaffPage.html')
     
@@ -40,21 +40,26 @@ def GetEmp():
 def staffLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
-
-    fetch_sql = "SELECT * FROM staff WHERE staffEmail = %s"
+    status = "Pending Approval"
+    
+    fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+    fetch_company_sql = "SELECT * FROM company WHERE status = %s"
     cursor = db_conn.cursor()
 
-    if staffEmail == "" and staffPassword == "":
+    if svEmail == "" and svPassword == "":
         return render_template('StaffLogin.html', empty_field=True)
 
     try:
-        cursor.execute(fetch_sql, (staffEmail,))
+        cursor.execute(fetch_sv_sql, (svEmail))
         records = cursor.fetchall()
 
-        if records and records[0][2] != staffPassword:
-            return render_template('StaffLogin.html', login_failed=True)
+        cursor.execute(fetch_student_sql, (status))
+        companyRecords = cursor.fetchall()
+
+        if records and records[0][2] != adminPassword:
+            return render_template('AdminLogin.html', login_failed=True)
         else:
-            return render_template('StaffPage.html', staff=records)
+            return render_template('AdminPage.html', admin=records, company=companyRecords)
 
     except Exception as e:
         return str(e)
