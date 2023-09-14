@@ -32,7 +32,10 @@ def home():
 def companyLogin():
     return render_template('StaffLogin.html') 
 
-
+@app.route("/staffPAge", methods=['POST'])
+def GetEmp():
+    return render_template('StaffPage.html')
+    
 @app.route("/staffLogin", methods=['GET', 'POST'])
 def staffLogin():
     svEmail = request.form['svEmail']
@@ -59,6 +62,37 @@ def staffLogin():
     finally:
         cursor.close()
 
+
+@app.route("/fetchdata", methods=['POST'])
+def ReadEmp():
+    emp_id = request.form['emp_id']
+
+    fetch_sql = "SELECT * FROM employee WHERE emp_id = %s"
+    cursor = db_conn.cursor()
+    object_key = "emp-id-" + str(emp_id) + "_image_file" + ".jpg"
+    expiration = 3600
+
+    if emp_id == "":
+        return "Please enter an employee id"
+
+
+    try:
+        cursor.execute(fetch_sql, (emp_id))
+        records = cursor.fetchall()
+        try:
+            response = s3.generate_presigned_url('get_object',
+                                                Params={'Bucket': custombucket,
+                                                        'Key': object_key},
+                                                ExpiresIn=expiration)
+        except ClientError as e:
+            logging.error(e)
+
+
+
+    finally:
+        cursor.close()
+
+    return render_template('GetEmpOutput.html', staff=records, url=response)
     
 
 
