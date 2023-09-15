@@ -34,7 +34,7 @@ def svLogin():
 
     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
     fetch_student_sql = "SELECT * FROM student WHERE uniSupervisor = %s"
-    
+
     cursor = db_conn.cursor()
 
     try:
@@ -55,18 +55,33 @@ def svLogin():
 
         # Generate URLs for student files from S3
         student_records_url = {}
-        object_keys = ["com_acceptance_form", "parent_ack_form", "letter_of_indemnity", "hired_evidence"]
+        file_names = ["com_acceptance_form", "parent_ack_form", "letter_of_indemnity", "hired_evidence"]
         expiration = 3600
 
         for student in student_records:
             student_id = student['studId']
             urls = {}
-            for key in object_keys:
-                object_key = f"stud-id-{student_id}/{student[key]}"
-                urls[key] = generate_presigned_url(object_key, expiration)
-            student_records_url[student_id] = urls
+            object_prefix = "stud-id-" + str(student_id)
+            for file_name in file_names:
+                object_key = f"{object_prefix}/{file_name}.pdf"
+                response = s3.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        'Bucket': custombucket,
+                        'Key': object_key
+                    },
+                    ExpiresIn=expiration
+                )
+                urls[file_name] = response  # Store each URL with its respective file name
+            student_records_url[student_id] = urls  # Store the URLs for the student
 
         return render_template('StaffPage.html', supervisor=supervisor_records[0], students=student_records, urls=student_records_url)
+    except Exception as e:
+        app.logger.error(str(e))
+        return "An error occurred."
+    finally:
+        cursor.close()
+
 
     except Exception as e:
         app.logger.error(str(e))
