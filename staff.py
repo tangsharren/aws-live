@@ -70,7 +70,7 @@ def svLogin():
 
 
     
-    fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+    fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
     # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
     cursor = db_conn.cursor()
 
@@ -78,7 +78,7 @@ def svLogin():
         return render_template('StaffLogin.html', empty_field=True)
 
     try:
-        cursor.execute(fetch_staff_sql, (svEmail,))
+        cursor.execute(fetch_supervisor_sql, (svEmail,))
         records = cursor.fetchall()
 
         # cursor.execute(fetch_company_sql, (status,))
@@ -89,7 +89,7 @@ def svLogin():
         if records and records[0][2] != svPassword:
             return render_template('StaffLogin.html', login_failed=True)
         else:
-            return render_template('StaffPage.html', staff=records, company=companyRecords)
+            return render_template('StaffPage.html', supervisor=records, company=companyRecords)
 
     except Exception as e:
         return str(e)
@@ -106,14 +106,14 @@ def svLogin():
 #     # companyName = request.args.get('companyName')
 #     svEmail = request.args.get('svEmail')
 
-#     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+#     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
 #     # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
 #     # sql = "UPDATE company SET status = %s WHERE companyName = %s"
 #     cursor = db_conn.cursor()
 
   
 #     try:
-#         cursor.execute(fetch_staff_sql, (svEmail,))
+#         cursor.execute(fetch_supervisor_sql, (svEmail,))
 #         records = cursor.fetchall()
         
 #         cursor.execute(sql, (status, companyName,))
@@ -123,7 +123,7 @@ def svLogin():
 #         companyRecords = cursor.fetchall()
 
 
-#         return render_template('StaffPage.html', staff=records, company=companyRecords, updateSuccessful=True )
+#         return render_template('StaffPage.html', supervisor=records, company=companyRecords, updateSuccessful=True )
 
 #     except Exception as e:
 #         return str(e)
@@ -139,14 +139,14 @@ def svLogin():
 #     companyName = request.args.get('companyName')
 #     svEmail = request.args.get('svEmail')
 
-#     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+#     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
 #     fetch_company_sql = "SELECT * FROM company WHERE status = %s"
 #     sql = "UPDATE company SET status = %s WHERE companyName = %s"
 #     cursor = db_conn.cursor()
 
   
 #     try:
-#         cursor.execute(fetch_staff_sql, (svEmail,))
+#         cursor.execute(fetch_supervisor_sql, (svEmail,))
 #         records = cursor.fetchall()
         
 #         cursor.execute(sql, (status, companyName,))
@@ -156,7 +156,7 @@ def svLogin():
 #         companyRecords = cursor.fetchall()
 
 
-#         return render_template('StaffPage.html', staff=records, company=companyRecords, updateSuccessful=True )
+#         return render_template('StaffPage.html', supervisor=records, company=companyRecords, updateSuccessful=True )
 
 #     except Exception as e:
 #         return str(e)
