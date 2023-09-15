@@ -33,7 +33,7 @@ def svLogin():
     svPassword = request.form['svPassword']
 
     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
-    fetch_student_sql = "SELECT * FROM student WHERE uniSupervisor = %s"
+    fetch_student_sql = "SELECT * FROM student WHERE uniEmail = %s"
 
     cursor = db_conn.cursor()
 
@@ -50,7 +50,7 @@ def svLogin():
         if supervisor_records and supervisor_records[0]['svPassword'] != svPassword:
             return render_template('StaffLogin.html', login_failed=True)
 
-        cursor.execute(fetch_student_sql, (svName,))
+        cursor.execute(fetch_student_sql, (svEmail,))
         student_records = cursor.fetchall()
 
         # Generate URLs for student files from S3
