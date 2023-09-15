@@ -32,6 +32,8 @@ def svLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
 
+    print("svEmail:", svEmail)
+
     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
     fetch_student_sql = "SELECT * FROM student WHERE uniEmail = %s"
 
