@@ -19,7 +19,7 @@ db_conn = connections.Connection(
 )
 output = {}
 table = 'supervisor'
-
+s3=boto3.client('s3')
 
 #if call / then will redirect to that pg
 
