@@ -27,142 +27,43 @@ table = 'company'
 def home():
     return render_template('Home.html')
 
-# @app.route("/companyReg", methods=['POST'])
-# def companyReg():
-#     companyName = request.form['companyName']
-#     companyEmail = request.form['companyEmail']
-#     companyContact = request.form['companyContact']
-#     companyAddress = request.form['companyAddress']
-#     typeOfBusiness = request.form['typeOfBusiness']
-#     numOfEmployee = request.form['numOfEmployee']
-#     overview = request.form['overview']
-#     companyPassword = request.form['companyPassword']
-#     status = "Pending Approval"
-
-   
-#     insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-#     cursor = db_conn.cursor()
-
-     
-
-#     try:
-
-#         cursor.execute(insert_sql, (companyName, companyEmail, companyContact, companyAddress, typeOfBusiness, numOfEmployee, overview, companyPassword, status,))
-#         db_conn.commit()
-        
-
-#     except Exception as e:
-#         return str(e) 
-        
-
-#     finally:
-#         cursor.close()
-
-#     return render_template('CompanyLogin.html')
-
-
-
-@app.route("/svLogin", methods=['GET', 'POST'])
+@app.route("/svLogin", methods=['POST'])
 def svLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
-    # status = "Pending Approval"
 
-
-    
     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
-    # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
+    fetch_student_sql = "SELECT * FROM student WHERE uniSupervisor = %s"
+    
     cursor = db_conn.cursor()
 
-    if svEmail == "" and svPassword == "":
-        return render_template('StaffLogin.html', empty_field=True)
-
     try:
+        if not svEmail or not svPassword:
+            return render_template('StaffLogin.html', empty_field=True)
+
         cursor.execute(fetch_supervisor_sql, (svEmail,))
-        records = cursor.fetchall()
+        supervisor_records = cursor.fetchall()
 
-        # cursor.execute(fetch_company_sql, (status,))
-        # companyRecords = cursor.fetchall()
+        if not supervisor_records:
+            return render_template('StaffLogin.html', login_failed=True)
 
-        if not records:
+        if supervisor_records and supervisor_records[0]['svPassword'] != svPassword:  # Use column name 'svPassword'
             return render_template('StaffLogin.html', login_failed=True)
-        if records and records[0][2] != svPassword:
-            return render_template('StaffLogin.html', login_failed=True)
-        else:
-            return render_template('StaffPage.html', supervisor=records, company=companyRecords)
+
+        cursor.execute(fetch_student_sql, (svName,))  # Change 'svEmail' to 'svName'
+        student_records = cursor.fetchall()
+
+        # Pass both supervisor and student records to the StaffPage template
+        return render_template('StaffPage.html', supervisor=supervisor_records[0], students=student_records)
 
     except Exception as e:
-        return str(e)
+        # Log the error or return a user-friendly error message
+        app.logger.error(str(e))
+        return "An error occurred."
 
     finally:
         cursor.close()
 
-# use the same logic for retrieving the supervisee
-# @app.route("/approveCompany", methods=['GET', 'POST'])
-# def approveCompany():
-
-#     status="Approved"
-#     status2="Pending Approval"
-#     # companyName = request.args.get('companyName')
-#     svEmail = request.args.get('svEmail')
-
-#     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
-#     # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
-#     # sql = "UPDATE company SET status = %s WHERE companyName = %s"
-#     cursor = db_conn.cursor()
-
-  
-#     try:
-#         cursor.execute(fetch_supervisor_sql, (svEmail,))
-#         records = cursor.fetchall()
-        
-#         cursor.execute(sql, (status, companyName,))
-#         db_conn.commit()
-
-#         cursor.execute(fetch_company_sql, (status2,))
-#         companyRecords = cursor.fetchall()
-
-
-#         return render_template('StaffPage.html', supervisor=records, company=companyRecords, updateSuccessful=True )
-
-#     except Exception as e:
-#         return str(e)
-
-#     finally:
-#         cursor.close()
-
-# @app.route("/rejectCompany", methods=['GET', 'POST'])
-# def rejectCompany():
-
-#     status="Rejected"
-#     status2="Pending Approval"
-#     companyName = request.args.get('companyName')
-#     svEmail = request.args.get('svEmail')
-
-#     fetch_supervisor_sql = "SELECT * FROM supervisor WHERE svEmail = %s"
-#     fetch_company_sql = "SELECT * FROM company WHERE status = %s"
-#     sql = "UPDATE company SET status = %s WHERE companyName = %s"
-#     cursor = db_conn.cursor()
-
-  
-#     try:
-#         cursor.execute(fetch_supervisor_sql, (svEmail,))
-#         records = cursor.fetchall()
-        
-#         cursor.execute(sql, (status, companyName,))
-#         db_conn.commit()
-
-#         cursor.execute(fetch_company_sql, (status2,))
-#         companyRecords = cursor.fetchall()
-
-
-#         return render_template('StaffPage.html', supervisor=records, company=companyRecords, updateSuccessful=True )
-
-#     except Exception as e:
-#         return str(e)
-
-#     finally:
-#         cursor.close()
 
 @app.route("/toSvLogin")
 def toSvLogin():
@@ -207,6 +108,38 @@ def companyLogin():
     finally:
         cursor.close()
 
+
+
+@app.route("/Login", methods=['GET', 'POST'])
+def companyLogin():
+    companyEmail = request.form['companyEmail']
+    companyPassword = request.form['companyPassword']
+    status = "Approved"
+
+    fetch_company_sql = "SELECT * FROM company WHERE companyEmail = %s"
+    cursor = db_conn.cursor()
+
+    if companyEmail == "" and companyPassword == "":
+        return render_template('CompanyLogin.html', empty_field=True)
+
+    try:
+        cursor.execute(fetch_company_sql, (companyEmail,))
+        records = cursor.fetchall()
+
+        if not records:
+            return render_template('CompanyLogin.html', login_failed=True)
+        if records[0][7] != companyPassword:
+            return render_template('CompanyLogin.html', login_failed=True)
+        elif records[0][8] != status:
+            return render_template('CompanyLogin.html', inactive_acc=True)
+        else:
+            return render_template('CompanyPage.html', company=records)
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
