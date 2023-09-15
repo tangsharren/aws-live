@@ -63,7 +63,7 @@ def svLogin():
             urls = {}
             object_prefix = "stud-id-" + str(student_id)
             for file_name in file_names:
-                object_key = f"{object_prefix}/{file_name}.pdf"
+                object_key = str(object_prefix)+str(file_name)".pdf"
                 response = s3.generate_presigned_url(
                     'get_object',
                     Params={
