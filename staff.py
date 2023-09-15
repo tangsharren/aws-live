@@ -9,7 +9,7 @@ app = Flask(__name__)
 bucket = custombucket
 region = customregion
 
-db_conn = connections.Connection(   #Check the info is correct
+db_conn = connections.Connection(
     host=customhost,
     port=3306,
     user=customuser,
@@ -18,21 +18,16 @@ db_conn = connections.Connection(   #Check the info is correct
 
 )
 output = {}
-table = 'staff'
+table = 'company'
 
 
-#if call / then will redirect to this pg
+#if call / then will redirect to that pg
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    return render_template('StaffLogin.html')
+    return render_template('Home.html')
 
-#if call /studLogin then will redirect to this pg
-# @app.route("/companyLogin")
-# def compnayLogin():
-#     return render_template('CompanyLogin.html') 
-
-#if call /studView then will redirect to this pg
-# @app.route("/studView", methods=['POST'])
+# @app.route("/companyReg", methods=['POST'])
 # def companyReg():
 #     companyName = request.form['companyName']
 #     companyEmail = request.form['companyEmail']
@@ -52,7 +47,7 @@ def home():
 
 #     try:
 
-#         cursor.execute(insert_sql, (companyName, companyEmail, companyContact, companyAddress, typeOfBusiness, numOfEmployee, overview, companyPassword, status))
+#         cursor.execute(insert_sql, (companyName, companyEmail, companyContact, companyAddress, typeOfBusiness, numOfEmployee, overview, companyPassword, status,))
 #         db_conn.commit()
         
 
@@ -63,35 +58,38 @@ def home():
 #     finally:
 #         cursor.close()
 
-#     print("all modification done...")
 #     return render_template('CompanyLogin.html')
+
 
 
 @app.route("/staffLogin", methods=['GET', 'POST'])
 def staffLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
-    #status = "Pending Approval"
+    # status = "Pending Approval"
 
 
+    
     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
-    #fetch_company_sql = "SELECT * FROM company WHERE status = %s"
+    # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
     cursor = db_conn.cursor()
 
     if svEmail == "" and svPassword == "":
         return render_template('StaffLogin.html', empty_field=True)
 
     try:
-        cursor.execute(fetch_staff_sql, (svEmail))
+        cursor.execute(fetch_staff_sql, (svEmail,))
         records = cursor.fetchall()
 
-        # cursor.execute(fetch_company_sql, (status))
+        # cursor.execute(fetch_company_sql, (status,))
         # companyRecords = cursor.fetchall()
 
-        if records and records[0][4] != svPassword:
+        if not records:
+            return render_template('StaffLogin.html', login_failed=True)
+        if records and records[0][2] != svPassword:
             return render_template('StaffLogin.html', login_failed=True)
         else:
-            return render_template('StaffPage.html', staff=records)
+            return render_template('StaffPage.html', staff=records, company=companyRecords)
 
     except Exception as e:
         return str(e)
@@ -99,7 +97,115 @@ def staffLogin():
     finally:
         cursor.close()
 
-    
+# use the same logic for retrieving the supervisee
+# @app.route("/approveCompany", methods=['GET', 'POST'])
+# def approveCompany():
+
+#     status="Approved"
+#     status2="Pending Approval"
+#     # companyName = request.args.get('companyName')
+#     svEmail = request.args.get('svEmail')
+
+#     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+#     # fetch_company_sql = "SELECT * FROM company WHERE status = %s"
+#     # sql = "UPDATE company SET status = %s WHERE companyName = %s"
+#     cursor = db_conn.cursor()
+
+  
+#     try:
+#         cursor.execute(fetch_staff_sql, (svEmail,))
+#         records = cursor.fetchall()
+        
+#         cursor.execute(sql, (status, companyName,))
+#         db_conn.commit()
+
+#         cursor.execute(fetch_company_sql, (status2,))
+#         companyRecords = cursor.fetchall()
+
+
+#         return render_template('StaffPage.html', staff=records, company=companyRecords, updateSuccessful=True )
+
+#     except Exception as e:
+#         return str(e)
+
+#     finally:
+#         cursor.close()
+
+# @app.route("/rejectCompany", methods=['GET', 'POST'])
+# def rejectCompany():
+
+#     status="Rejected"
+#     status2="Pending Approval"
+#     companyName = request.args.get('companyName')
+#     svEmail = request.args.get('svEmail')
+
+#     fetch_staff_sql = "SELECT * FROM staff WHERE svEmail = %s"
+#     fetch_company_sql = "SELECT * FROM company WHERE status = %s"
+#     sql = "UPDATE company SET status = %s WHERE companyName = %s"
+#     cursor = db_conn.cursor()
+
+  
+#     try:
+#         cursor.execute(fetch_staff_sql, (svEmail,))
+#         records = cursor.fetchall()
+        
+#         cursor.execute(sql, (status, companyName,))
+#         db_conn.commit()
+
+#         cursor.execute(fetch_company_sql, (status2,))
+#         companyRecords = cursor.fetchall()
+
+
+#         return render_template('StaffPage.html', staff=records, company=companyRecords, updateSuccessful=True )
+
+#     except Exception as e:
+#         return str(e)
+
+#     finally:
+#         cursor.close()
+
+@app.route("/toStaffLogin")
+def toStaffLogin():
+    return render_template('StaffLogin.html') 
+
+@app.route("/toCompanyLogin")
+def toCompanyLogin():
+    return render_template('CompanyLogin.html') 
+
+@app.route("/toCompanyRegister")
+def toCompanyRegister():
+    return render_template('CompanyRegister.html') 
+
+@app.route("/companyLogin", methods=['GET', 'POST'])
+def companyLogin():
+    companyEmail = request.form['companyEmail']
+    companyPassword = request.form['companyPassword']
+    status = "Approved"
+
+    fetch_company_sql = "SELECT * FROM company WHERE companyEmail = %s"
+    cursor = db_conn.cursor()
+
+    if companyEmail == "" and companyPassword == "":
+        return render_template('CompanyLogin.html', empty_field=True)
+
+    try:
+        cursor.execute(fetch_company_sql, (companyEmail,))
+        records = cursor.fetchall()
+
+        if not records:
+            return render_template('CompanyLogin.html', login_failed=True)
+        if records[0][7] != companyPassword:
+            return render_template('CompanyLogin.html', login_failed=True)
+        elif records[0][8] != status:
+            return render_template('CompanyLogin.html', inactive_acc=True)
+        else:
+            return render_template('CompanyPage.html', company=records)
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
 
 
 if __name__ == '__main__':
