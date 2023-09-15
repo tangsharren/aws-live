@@ -36,14 +36,14 @@ def svLogin():
     fetch_student_sql = "SELECT * FROM student WHERE uniEmail = %s"
 
     cursor = db_conn.cursor()
-    
+
     try:
         if not svEmail or not svPassword:
             return render_template('StaffLogin.html', empty_field=True)
 
         cursor.execute(fetch_supervisor_sql, (svEmail,))
         supervisor_records = cursor.fetchall()
-        
+
         print(supervisor_records)
 
         if not supervisor_records:
@@ -56,16 +56,17 @@ def svLogin():
         student_records = cursor.fetchall()
 
         # Generate URLs for student files from S3
-        student_records_url = {}
+        student_records_urls = []
         file_names = ["com_acceptance_form", "parent_ack_form", "letter_of_indemnity", "hired_evidence"]
         expiration = 3600
 
         for student in student_records:
             student_id = student[1]
-            urls = {}
+            student_urls = []
             object_prefix = str(student_id)
+            
             for file_name in file_names:
-                object_key = str(object_prefix)+"_"+str(file_name)+".pdf"
+                object_key = str(object_prefix) + "_" + str(file_name) + ".pdf"
                 response = s3.generate_presigned_url(
                     'get_object',
                     Params={
@@ -74,10 +75,11 @@ def svLogin():
                     },
                     ExpiresIn=expiration
                 )
-                urls[file_name] = response  # Store each URL with its respective file name
-            student_records_url[student_id] = urls  # Store the URLs for the student
+                student_urls.append(response)  # Add the URL to the student's URL list
+            
+            student_records_urls.append(student_urls)  # Add the student's URL list to the 2D table
 
-        return render_template('StaffPage.html', supervisor=supervisor_records[0], students=student_records, urls=student_records_url)
+        return render_template('StaffPage.html', supervisor=supervisor_records[0], students=student_records, urls=student_records_urls)
     except Exception as e:
         app.logger.error(str(e))
         return "An error occurred."
