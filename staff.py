@@ -18,7 +18,7 @@ db_conn = connections.Connection(
 
 )
 output = {}
-table = 'company'
+table = 'supervisor'
 
 
 #if call / then will redirect to that pg
