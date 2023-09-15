@@ -82,14 +82,6 @@ def svLogin():
     finally:
         cursor.close()
 
-
-    except Exception as e:
-        app.logger.error(str(e))
-        return "An error occurred."
-
-    finally:
-        cursor.close()
-
         
 @app.route("/toSvLogin")
 def toSvLogin():
