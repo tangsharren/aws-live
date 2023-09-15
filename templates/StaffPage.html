@@ -2,7 +2,7 @@
 <html style="font-size: 16px;" lang="en"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Welcome : Marcus Baker">
+    <meta name="keywords" content="Welcome">
     <meta name="description" content="">
     <title>StaffPage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='nicepage.css') }}">
@@ -95,7 +95,8 @@
       <div class="u-clearfix u-sheet u-sheet-1">
         <quillbot-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none;"></quillbot-extension>
         <quillbot-extension-highlights style="position: absolute; top: 0px; left: 0px; pointer-events: none;"></quillbot-extension-highlights>
-        <h1 class="u-text u-text-body-color u-text-default u-text-1">Welcome: Siak Yen</h1>
+        <h1 class="u-text u-text-body-color u-text-default u-text-1">Welcome: {{ supervisor['svName'] }}</h1>
+	
         <div class="u-table u-table-responsive u-table-1">
           <pwa-container-wrapper style="display: flex !important; height: 0px;"></pwa-container-wrapper>
           <table class="u-table-entity">
@@ -104,39 +105,37 @@
               <col width="71.97%">
             </colgroup>
             <thead class="u-custom-font u-font-merriweather u-palette-5-light-2 u-table-header u-table-header-1">
-              <tr style="height: 34px;">
+              <tr style="height: 49px;">
                 <th class="u-table-cell u-table-cell-1">Uni Supervisor Detail </th>
                 <th class="u-table-cell"></th>
               </tr>
             </thead>
-            <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-1">
-              <tr style="height: 84px;">
-                <td class="u-align-right u-table-cell u-table-cell-3">
-                  <span style="font-size: 1.25rem;">Supervisor Name</span>
-                </td>
-                <td class="u-table-cell">Lee Siak Yen</td>
-              </tr>
-              <tr style="height: 26px;">
-                <td class="u-align-right u-table-cell u-table-cell-5"> Supervisor ID</td>
-                <td class="u-table-cell">123</td>
-              </tr>
-              <tr style="height: 34px;">
-                <td class="u-align-right u-table-cell u-table-cell-7"> NRIC No.</td>
-                <td class="u-table-cell">020304-10-1302</td>
-              </tr>
-              <tr style="height: 46px;">
-                <td class="u-align-right u-table-cell u-table-cell-9"> Gender</td>
-                <td class="u-table-cell">M</td>
-              </tr>
-              <tr style="height: 58px;">
-                <td class="u-align-right u-table-cell u-table-cell-11"> Supervisor Email</td>
-                <td class="u-table-cell">siakyen@tarc.edu.my<br>
-                </td>
-              </tr>
-              <tr style="height: 64px;">
-                <td class="u-align-right u-table-cell u-table-cell-13"> Mobile Number</td>
-                <td class="u-table-cell">012-3456789</td>
-              </tr>
+              <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-2">
+            <!-- Display supervisor's details -->
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-15">Supervisor Name</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svName']  }}</td>
+            </tr>
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Supervisor ID</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svId']  }}</td>
+            </tr>
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">NRIC No.</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svIc']  }}</td>
+            </tr>
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Gender</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svGender'] }}</td>
+            </tr>
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Supervisor Email</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svEmail'] }}</td>
+            </tr>
+            <tr style="height: 49px;">
+                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Mobile Number</td>
+                <td class="u-border-1 u-border-black u-table-cell">{{ supervisor['svContact'] }}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -154,10 +153,14 @@
                 </colgroup>
                 
                 <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-2">
-                    <!-- Initialize a variable to keep track of student count -->
+                    
+		    <!-- Initialize a variable to keep track of student count -->
                     {% set student_count = 1 %}
-                    <!-- Iterate over each student in the 'students' list -->
+		    <!-- Iterate over each student in the 'students' list -->
                     {% for student in students %}
+		    <tr>
+                        <td colspan="2">Student {{ student_count }}</td>
+                    </tr>
                     <tr style="height: 49px;">
                         <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-15">Student ID</td>
                         <td class="u-border-1 u-border-black u-table-cell">{{ student.student_id }}</td>
@@ -174,33 +177,25 @@
                         <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-21">Contact Number</td>
                         <td class="u-border-1 u-border-black u-table-cell">{{ student.contact_number }}</td>
                     </tr>
-                    <!-- Add a horizontal line to separate students -->
-                    <tr>
-                        <td colspan="2"><hr></td>
-                    </tr>
-                    <!-- Add student labels -->
-                    <tr>
-                        <td colspan="2">Student {{ student_count + 1 }}</td>
-                    </tr>
-                    <!-- Increment student count -->
-                    {% set student_count = student_count + 1 %}
+                    
                         <!-- Additional student information -->
                         <tr style="height: 49px;">
                             <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-23">Com.Acceptance Form</td>
                             <td class="u-border-1 u-border-black u-table-cell">
-                                <a href="{{ student.com_acceptance_form }}" target="_blank">Download</a>
+                                <a href="{{ urls.com_acceptance_form }}" target="_blank">Download</a>
                             </td>
                         </tr>
                         <tr style="height: 58px;">
                             <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-25">Parent Ack.Form</td>
                             <td class="u-border-1 u-border-black u-table-cell">
-                                <a href="{{ student.parent_ack_form }}" target="_blank">Download</a>
+                                <a href="{{ urls.parent_ack_form }}" target="_blank">Download</a>
                             </td>
                         </tr>
                         <tr style="height: 58px;">
                             <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-27">Letter of Indemnity</td>
                             <td class="u-border-1 u-border-black u-table-cell">
-                                <a href="{{ student.letter_of_indemnity }}" target="_blank">Download</a>
+                                <a href="{{ urls.letter_of_indemnity }}" target="_blank">Download</a>
+
                             </td>
                         </tr>
                         <tr style="height: 84px;">
@@ -210,6 +205,13 @@
                             </td>
                         </tr>
                         <!-- End of additional student information -->
+			<!-- Add a horizontal line to separate students -->
+                    <tr>
+                        <td colspan="2"><hr></td>
+                    </tr>
+                    
+                    <!-- Increment student count -->
+                    {% set student_count = student_count + 1 %}
                     </tr>
                     <!-- End of additional student information -->
                     {% endfor %}
