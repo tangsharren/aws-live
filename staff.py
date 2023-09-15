@@ -61,7 +61,7 @@ def svLogin():
         expiration = 3600
 
         for student in student_records:
-            student_id = student['studId']
+            student_id = student[1]
             urls = {}
             object_prefix = "stud-id-" + str(student_id)
             for file_name in file_names:
