@@ -27,7 +27,7 @@ s3=boto3.client('s3')
 def home():
     return render_template('StaffLogin.html')
 
-@app.route("/svLogin", methods=['POST'])
+@app.route("/svLogin", methods=['GET', 'POST'])
 def svLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
