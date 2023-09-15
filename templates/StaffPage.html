@@ -7,14 +7,29 @@
     <title>StaffPage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='nicepage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='StaffPage.css') }}">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+
+
     <meta name="generator" content="Nicepage 5.17.1, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i">
     
-    
-    
+   
+    <style>
+      #nav {
+        list-style-type: none;
+        padding: 0;
+        overflow: hidden;
+      }
+      
+      #link {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+      </style>
+      
     <script type="application/ld+json">{
 		"@context": "http://schema.org",
 		"@type": "Organization",
@@ -130,49 +145,65 @@
             <p class="u-custom-font u-font-merriweather u-text u-text-2"> Supervisee</p>
           </div>
         </div>
-        <div class="u-align-center u-table u-table-responsive u-table-2">
-          <pwa-container-wrapper style="display: flex !important; height: 0px;"></pwa-container-wrapper>
-          <table class="u-table-entity">
-            <colgroup>
-              <col width="28.03%">
-              <col width="71.97%">
-            </colgroup>
-            <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-2">
-              <tr style="height: 49px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-15">Student ID</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 49px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Student Name</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 25px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-19">Student Email<span style="font-size: 0.75rem;"></span>
-                </td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 49px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-21">Contact Number</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 49px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-23">Com.Acceptance Form</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 58px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-25">Parent Ack.Form</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 58px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-27">Letter of Indemnity</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-              <tr style="height: 84px;">
-                <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-29">Hired evidence</td>
-                <td class="u-border-1 u-border-black u-table-cell"></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="u-align-center u-table u-table-responsive u-table-2">
+            <pwa-container-wrapper style="display: flex !important; height: 0px;"></pwa-container-wrapper>
+            <table class="u-table-entity">
+                <colgroup>
+                    <col width="28.03%">
+                    <col width="71.97%">
+                </colgroup>
+                <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-2">
+                    <!-- Initialize a variable to keep track of student count -->
+                    {% set student_count = 1 %}
+                    <!-- Iterate over each student in the 'students' list -->
+                    {% for student in students %}
+                    <tr style="height: 49px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-15">Student ID</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.student_id }}</td>
+                    </tr>
+                    <tr style="height: 49px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-17">Student Name</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.student_name }}</td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-19">Student Email<span style="font-size: 0.75rem;"></span></td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.student_email }}</td>
+                    </tr>
+                    <tr style="height: 49px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-21">Contact Number</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.contact_number }}</td>
+                    </tr>
+                    <!-- Add a horizontal line to separate students -->
+                    <tr>
+                        <td colspan="2"><hr></td>
+                    </tr>
+                    <!-- Add student labels -->
+                    <tr>
+                        <td colspan="2">Student {{ student_count + 1 }}</td>
+                    </tr>
+                    <!-- Increment student count -->
+                    {% set student_count = student_count + 1 %}
+                    <!-- Additional student information -->
+                    <tr style="height: 49px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-23">Com.Acceptance Form</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.com_acceptance_form }}</td>
+                    </tr>
+                    <tr style="height: 58px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-25">Parent Ack.Form</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.parent_ack_form }}</td>
+                    </tr>
+                    <tr style="height: 58px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-27">Letter of Indemnity</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.letter_of_indemnity }}</td>
+                    </tr>
+                    <tr style="height: 84px;">
+                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-29">Hired evidence</td>
+                        <td class="u-border-1 u-border-black u-table-cell">{{ student.hired_evidence }}</td>
+                    </tr>
+                    <!-- End of additional student information -->
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
       </div>
     </section>
