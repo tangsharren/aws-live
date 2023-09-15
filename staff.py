@@ -62,7 +62,7 @@ def home():
 
 
 
-@app.route("/staffLogin", methods=['GET', 'POST'])
+@app.route("/svLogin", methods=['GET', 'POST'])
 def staffLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
