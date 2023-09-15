@@ -63,7 +63,7 @@ def home():
 
 
 @app.route("/svLogin", methods=['GET', 'POST'])
-def staffLogin():
+def svLogin():
     svEmail = request.form['svEmail']
     svPassword = request.form['svPassword']
     # status = "Pending Approval"
@@ -164,8 +164,8 @@ def staffLogin():
 #     finally:
 #         cursor.close()
 
-@app.route("/toStaffLogin")
-def toStaffLogin():
+@app.route("/toSvLogin")
+def toSvLogin():
     return render_template('StaffLogin.html') 
 
 @app.route("/toCompanyLogin")
