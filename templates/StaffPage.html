@@ -184,22 +184,32 @@
                     </tr>
                     <!-- Increment student count -->
                     {% set student_count = student_count + 1 %}
-                    <!-- Additional student information -->
-                    <tr style="height: 49px;">
-                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-23">Com.Acceptance Form</td>
-                        <td class="u-border-1 u-border-black u-table-cell">{{ student.com_acceptance_form }}</td>
-                    </tr>
-                    <tr style="height: 58px;">
-                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-25">Parent Ack.Form</td>
-                        <td class="u-border-1 u-border-black u-table-cell">{{ student.parent_ack_form }}</td>
-                    </tr>
-                    <tr style="height: 58px;">
-                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-27">Letter of Indemnity</td>
-                        <td class="u-border-1 u-border-black u-table-cell">{{ student.letter_of_indemnity }}</td>
-                    </tr>
-                    <tr style="height: 84px;">
-                        <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-29">Hired evidence</td>
-                        <td class="u-border-1 u-border-black u-table-cell">{{ student.hired_evidence }}</td>
+                        <!-- Additional student information -->
+                        <tr style="height: 49px;">
+                            <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-23">Com.Acceptance Form</td>
+                            <td class="u-border-1 u-border-black u-table-cell">
+                                <a href="{{ student.com_acceptance_form }}" target="_blank">Download</a>
+                            </td>
+                        </tr>
+                        <tr style="height: 58px;">
+                            <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-25">Parent Ack.Form</td>
+                            <td class="u-border-1 u-border-black u-table-cell">
+                                <a href="{{ student.parent_ack_form }}" target="_blank">Download</a>
+                            </td>
+                        </tr>
+                        <tr style="height: 58px;">
+                            <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-27">Letter of Indemnity</td>
+                            <td class="u-border-1 u-border-black u-table-cell">
+                                <a href="{{ student.letter_of_indemnity }}" target="_blank">Download</a>
+                            </td>
+                        </tr>
+                        <tr style="height: 84px;">
+                            <td class="u-align-right u-border-1 u-border-black u-table-cell u-table-cell-29">Hired evidence</td>
+                            <td class="u-border-1 u-border-black u-table-cell">
+                                <a href="{{ student.hired_evidence }}" target="_blank">Download</a>
+                            </td>
+                        </tr>
+                        <!-- End of additional student information -->
                     </tr>
                     <!-- End of additional student information -->
                     {% endfor %}
