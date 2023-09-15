@@ -36,13 +36,15 @@ def svLogin():
     fetch_student_sql = "SELECT * FROM student WHERE uniEmail = %s"
 
     cursor = db_conn.cursor()
-
+    
     try:
         if not svEmail or not svPassword:
             return render_template('StaffLogin.html', empty_field=True)
 
         cursor.execute(fetch_supervisor_sql, (svEmail,))
         supervisor_records = cursor.fetchall()
+        
+        print(supervisor_records)
 
         if not supervisor_records:
             return render_template('StaffLogin.html', login_failed=True)
