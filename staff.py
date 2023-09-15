@@ -47,7 +47,7 @@ def svLogin():
         if not supervisor_records:
             return render_template('StaffLogin.html', login_failed=True)
 
-        if supervisor_records and supervisor_records[0]['svPassword'] != svPassword:
+        if supervisor_records and supervisor_records[0][6] != svPassword:
             return render_template('StaffLogin.html', login_failed=True)
 
         cursor.execute(fetch_student_sql, (svEmail,))
