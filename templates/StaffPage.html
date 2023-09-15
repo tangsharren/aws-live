@@ -153,9 +153,7 @@
                 </colgroup>
                 
                 <tbody class="u-align-left u-custom-font u-font-merriweather u-table-body u-table-body-2">
-                    
-		    <!-- Initialize a variable to keep track of student count -->
-                    {% set student_count = 1 %}
+
 		    <!-- Iterate over each student in the 'students' list -->
                     {% for student in students %}
 		    <tr>
@@ -211,8 +209,7 @@
                     </tr>
                     </tr>
                     <!-- End of additional student information -->
-		            <!-- Increment student count -->
-	                    {% set student_count = student_count + 1 %}
+		          
                     {% endfor %}
                 </tbody>
             </table>
