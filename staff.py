@@ -66,7 +66,8 @@ def svLogin():
             student_id = student[1]
             student_urls = []
             object_prefix = str(student_id)
-            
+            # assuming the files are saved in this form at student page
+            # eg/ 21WMR01091_com_acceptance_form.pdf
             for file_name in file_names:
                 object_key = str(object_prefix) + "_" + str(file_name) + ".pdf"
                 response = s3.generate_presigned_url(
